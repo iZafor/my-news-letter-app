@@ -1,18 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
+const PORT = process.env.PORT || 3000; 
 
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 /* Home Route */
-app.get(
-    "/",
-    (req, res) => {
-        res.sendFile(`${__dirname}/signup.html`);
-    }
-);
 
 app.post(
     "/",
@@ -44,14 +39,14 @@ app.post(
         async function run(){
             try{
                 const response = await mailchimp.lists.addListMember(...usrData);
-                res.sendFile(`${__dirname}/success.html`);
+                res.sendFile(`${__dirname}/public/success.html`);
             }catch(error){
                 // res.send(error); 
                 // const errorCode = error.status;
                 // const errorMessege = JSON.parse(error.response.text).detail;
                 // console.log(`Error code: ${errorCode}`);
                 // console.log(`Details: ${errorMessege}`);
-                res.sendFile(`${__dirname}/failure.html`);
+                res.sendFile(`${__dirname}/public/failure.html`);
             }
         };
 
@@ -67,4 +62,4 @@ app.post(
     }
 );
 
-app.listen(process.env.PORT || 3000, () => console.log("Server is running on port 3000"));
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
